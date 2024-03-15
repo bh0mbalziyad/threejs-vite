@@ -1,6 +1,6 @@
 import "src/app.css";
 import * as T from "three";
-
+import gsap from "gsap";
 // Canvas
 const canvas = document.querySelector("canvas.webgl");
 
@@ -47,21 +47,24 @@ const rdr = new T.WebGLRenderer({
 rdr.setSize(sizes.width, sizes.height);
 rdr.render(scene, camera);
 
-const clock = new T.Clock();
+// GSAP Stuff
+
+/*
+
+takes two params
+
+first - the object to modify
+second - the property on the object which is to be updated along with options like delay, duration etc.
+
+*/
+
+gsap.to(cube.position, { x: 2, duration: 1, delay: 1 });
+gsap.to(cube.position, { x: 0, duration: 1, delay: 2 });
 
 // Animation loop
 
 function tick() {
-  // Frame rate hack
-  const elapsedTime = clock.getElapsedTime();
-
-  camera.position.x = Math.cos(elapsedTime);
-  camera.position.y = Math.sin(elapsedTime);
-
-  camera.lookAt(cube.position);
-
   rdr.render(scene, camera);
-
   // Provide callback to invoke on next frame
   window.requestAnimationFrame(tick);
 }
