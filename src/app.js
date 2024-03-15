@@ -12,26 +12,16 @@ const scene = new T.Scene();
 const group = new T.Group();
 scene.add(group);
 
-const cube1 = new T.Mesh(
+const cube = new T.Mesh(
+  // A uniform sized box i.e. a cube
   new T.BoxGeometry(1, 1, 1),
-  new T.MeshBasicMaterial({ color: 0xd6d6d6 })
-);
-
-const cube2 = new T.Mesh(
-  new T.BoxGeometry(1, 1, 1),
+  // Material for the box
   new T.MeshBasicMaterial({ color: 0xff4646 })
 );
 
-cube1.position.x = 1;
-cube2.position.x = -1;
+cube.position.x = 1;
 
-group.add(cube1);
-group.add(cube2);
-
-group.position.y = -1;
-group.scale.x = 2;
-group.scale.y = 2;
-group.rotation.x = -0.2;
+group.add(cube);
 
 // AxesHelper
 const axesHelper = new T.AxesHelper(2);
@@ -52,5 +42,29 @@ const rdr = new T.WebGLRenderer({
   canvas,
 });
 
+// Render the scene
+
 rdr.setSize(sizes.width, sizes.height);
 rdr.render(scene, camera);
+
+const clock = new T.Clock();
+
+// Animation loop
+
+function tick() {
+  // Frame rate hack
+  const elapsedTime = clock.getElapsedTime();
+
+  camera.position.x = Math.cos(elapsedTime);
+  camera.position.y = Math.sin(elapsedTime);
+
+  camera.lookAt(cube.position);
+
+  rdr.render(scene, camera);
+
+  // Provide callback to invoke on next frame
+  window.requestAnimationFrame(tick);
+}
+
+// Start animation loop
+tick();
